@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Calculator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mt-5">
+                    <div class="card-body">
+                        <h1 class="card-title text-center">Advanced Calculator</h1>
+                        <form id="calculator-form" method="post">
+                            <div class="form-group">
+                                <label for="num1">Number 1:</label>
+                                <input type="text" id="num1" name="num1" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="num2">Number 2 (optional):</label>
+                                <input type="text" id="num2" name="num2" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="operation">Operation:</label>
+                                <select id="operation" name="operation" class="form-control">
+                                    <option value="add">Add</option>
+                                    <option value="subtract">Subtract</option>
+                                    <option value="multiply">Multiply</option>
+                                    <option value="divide">Divide</option>
+                                    <option value="modulus">Modulus</option>
+                                    <option value="exponentiate">Exponentiate</option>
+                                    <option value="square_root">Square Root</option>
+                                    <option value="logarithm">Logarithm</option>
+                                    <option value="sine">Sine</option>
+                                    <option value="cosine">Cosine</option>
+                                    <option value="tangent">Tangent</option>
+                                    <option value="celsius_to_fahrenheit">Celsius to Fahrenheit</option>
+                                    <option value="fahrenheit_to_celsius">Fahrenheit to Celsius</option>
+                                    <option value="memory_add">Add to Memory</option>
+                                    <option value="memory_recall">Recall Memory</option>
+                                    <option value="memory_clear">Clear Memory</option>
+                                    <option value="history_clear">Clear History</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Calculate</button>
+                            <button type="button" id="clear-button" class="btn btn-secondary btn-block">Clear</button>
+                        </form>
+                        <div id="result" class="mt-4"></div>
+                        <h3>History</h3>
+                        <ul id="history">
+                            {% for entry in history %}
+                                <li>{{ entry }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <h2>Plot Graph</h2>
+                        <form id="plot-form">
+                            <div class="form-group">
+                                <label for="function">Enter a function (e.g., x**2, sin(x)): </label>
+                                <input type="text" id="function" name="function" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-success btn-block">Plot</button>
+                        </form>
+                        <div id="plot-result" class="mt-4"></div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                    <div class="card-body">
+                        <a href="/logout" class="btn btn-danger btn-block">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
