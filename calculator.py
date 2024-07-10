@@ -111,6 +111,14 @@ def calculator():
             elif operation == 'history_clear':
                 history.clear()
                 result = "History cleared."
+            elif operation == 'degrees_to_radians':
+                result = math.radians(num1)
+            elif operation == 'radians_to_degrees':
+                result = math.degrees(num1)
+            elif operation == 'absolute_value':
+                result = abs(num1)
+            elif operation == 'factorial':
+                result = math.factorial(int(num1))
             else:
                 result = "Invalid operation"
             
