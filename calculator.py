@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 
 app = Flask(__name__)
 
@@ -19,7 +19,6 @@ def divide(x, y):
 
 @app.route('/', methods=['GET', 'POST'])
 def calculator():
-    result = None
     if request.method == 'POST':
         num1 = float(request.form['num1'])
         num2 = float(request.form['num2'])
@@ -36,7 +35,8 @@ def calculator():
         else:
             result = "Invalid operation"
 
-    return render_template('calculator.html', result=result)
+        return jsonify(result=result)
+    return render_template('calculator.html')
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0')
