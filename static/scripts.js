@@ -1,28 +1,17 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const form = document.getElementById("calculator-form");
-    const resultDiv = document.getElementById("result");
-    const clearButton = document.getElementById("clear-button");
-
-    form.addEventListener("submit", function(event) {
+$(document).ready(function() {
+    $('#calculator-form').on('submit', function(event) {
         event.preventDefault();
-        const formData = new FormData(form);
-        const num1 = formData.get("num1");
-        const num2 = formData.get("num2");
-        const operation = formData.get("operation");
+        const formData = $(this).serialize();
 
-        fetch("/", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            resultDiv.innerHTML = `<h2>Result: ${data.result}</h2>`;
-        })
-        .catch(error => console.error("Error:", error));
+        $.post('/', formData, function(data) {
+            $('#result').html(`<h2 class="text-center">Result: ${data.result}</h2>`);
+        }, 'json').fail(function() {
+            $('#result').html('<h2 class="text-center text-danger">Error: Invalid input or operation</h2>');
+        });
     });
 
-    clearButton.addEventListener("click", function() {
-        form.reset();
-        resultDiv.innerHTML = "";
+    $('#clear-button').on('click', function() {
+        $('#calculator-form')[0].reset();
+        $('#result').html('');
     });
 });
