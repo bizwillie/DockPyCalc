@@ -14,8 +14,8 @@
                 <input type="text" id="num1" name="num1" required>
             </div>
             <div class="input-group">
-                <label for="num2">Number 2:</label>
-                <input type="text" id="num2" name="num2" required>
+                <label for="num2">Number 2 (optional):</label>
+                <input type="text" id="num2" name="num2">
             </div>
             <div class="input-group">
                 <label for="operation">Operation:</label>
@@ -24,9 +24,13 @@
                     <option value="subtract">Subtract</option>
                     <option value="multiply">Multiply</option>
                     <option value="divide">Divide</option>
+                    <option value="modulus">Modulus</option>
+                    <option value="exponentiate">Exponentiate</option>
+                    <option value="square_root">Square Root</option>
                 </select>
             </div>
             <button type="submit">Calculate</button>
+            <button type="button" id="clear-button">Clear</button>
         </form>
 
         <div id="result" class="result">

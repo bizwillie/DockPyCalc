@@ -50,6 +50,14 @@ button:hover {
     background: #218838;
 }
 
+button#clear-button {
+    background: #dc3545;
+}
+
+button#clear-button:hover {
+    background: #c82333;
+}
+
 .result {
     margin-top: 20px;
 }
