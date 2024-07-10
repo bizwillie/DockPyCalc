@@ -1,7 +1,10 @@
 from flask import Flask, request, render_template, jsonify
+import math
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'supersecretkey'
 
+# Basic arithmetic operations
 def add(x, y):
     return x + y
 
@@ -17,6 +20,7 @@ def divide(x, y):
     else:
         return "Error: Cannot divide by zero"
 
+# Scientific operations
 def modulus(x, y):
     return x % y
 
@@ -28,6 +32,23 @@ def square_root(x):
         return x ** 0.5
     else:
         return "Error: Cannot take square root of a negative number"
+
+def logarithm(x, base=10):
+    if x > 0:
+        return math.log(x, base)
+    else:
+        return "Error: Logarithm of non-positive number is undefined"
+
+def sine(x):
+    return math.sin(math.radians(x))
+
+def cosine(x):
+    return math.cos(math.radians(x))
+
+def tangent(x):
+    return math.tan(math.radians(x))
+
+memory = []
 
 @app.route('/', methods=['GET', 'POST'])
 def calculator():
@@ -52,6 +73,25 @@ def calculator():
                 result = exponentiate(num1, float(num2))
             elif operation == 'square_root':
                 result = square_root(num1)
+            elif operation == 'logarithm':
+                result = logarithm(num1, float(num2) if num2 else 10)
+            elif operation == 'sine':
+                result = sine(num1)
+            elif operation == 'cosine':
+                result = cosine(num1)
+            elif operation == 'tangent':
+                result = tangent(num1)
+            elif operation == 'memory_add':
+                memory.append(num1)
+                result = f"Added {num1} to memory."
+            elif operation == 'memory_recall':
+                if memory:
+                    result = f"Memory: {memory[-1]}"
+                else:
+                    result = "Memory is empty."
+            elif operation == 'memory_clear':
+                memory.clear()
+                result = "Memory cleared."
             else:
                 result = "Invalid operation"
         except ValueError:
