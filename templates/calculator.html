@@ -43,6 +43,11 @@
                                     <option value="memory_recall">Recall Memory</option>
                                     <option value="memory_clear">Clear Memory</option>
                                     <option value="history_clear">Clear History</option>
+                                    <option value="degrees_to_radians">Degrees to Radians</option>
+                                    <option value="radians_to_degrees">Radians to Degrees</option>
+                                    <option value="absolute_value">Absolute Value</option>
+                                    <option value="factorial">Factorial</option>
+                                    <!-- Add more options for new scientific functions -->
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary btn-block">Calculate</button>
@@ -80,5 +85,45 @@
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#calculator-form').on('submit', function(event) {
+                event.preventDefault();
+                const formData = $(this).serialize();
+
+                $.post('/', formData, function(data) {
+                    $('#result').html(`<h2 class="text-center">Result: ${data.result}</h2>`);
+                }, 'json').fail(function() {
+                    $('#result').html('<h2 class="text-center text-danger">Error: Invalid input or operation</h2>');
+                });
+            });
+
+            $('#clear-button').on('click', function() {
+                $('#calculator-form')[0].reset();
+                $('#result').html('');
+            });
+
+            $('#plot-form').on('submit', function(event) {
+                event.preventDefault();
+                const formData = $(this).serialize();
+
+                $.post('/plot', formData, function(data) {
+                    if (data.success) {
+                        $('#plot-result').html(`<div id="plot"></div>`);
+                        Plotly.newPlot('plot', data.graph_data, {
+                            title: 'Graph',
+                            xaxis: { title: 'X-axis' },
+                            yaxis: { title: 'Y-axis' }
+                        });
+                    } else {
+                        $('#plot-result').html('<h2 class="text-center text-danger">Error: Could not plot the graph</h2>');
+                    }
+                }, 'json').fail(function() {
+                    $('#plot-result').html('<h2 class="text-center text-danger">Error: Could not plot the graph</h2>');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

@@ -20,7 +20,16 @@ $(document).ready(function() {
         const formData = $(this).serialize();
 
         $.post('/plot', formData, function(data) {
-            $('#plot-result').html(`<img src="${data.graph_url}" alt="Graph">`);
+            if (data.success) {
+                $('#plot-result').html(`<div id="plot"></div>`);
+                Plotly.newPlot('plot', data.graph_data, {
+                    title: 'Graph',
+                    xaxis: { title: 'X-axis' },
+                    yaxis: { title: 'Y-axis' }
+                });
+            } else {
+                $('#plot-result').html('<h2 class="text-center text-danger">Error: Could not plot the graph</h2>');
+            }
         }, 'json').fail(function() {
             $('#plot-result').html('<h2 class="text-center text-danger">Error: Could not plot the graph</h2>');
         });
