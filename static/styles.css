@@ -39,6 +39,10 @@ body {
     border-color: #545b62;
 }
 
-h2 {
+h2, h3 {
     color: #007bff;
+}
+
+#plot-result img {
+    max-width: 100%;
 }
