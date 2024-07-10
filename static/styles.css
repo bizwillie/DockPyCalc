@@ -13,6 +13,7 @@ body {
 
 .card-title {
     margin-bottom: 20px;
+    color: #007bff; /* Updated color */
 }
 
 .form-group label {

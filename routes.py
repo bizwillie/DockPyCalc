@@ -2,6 +2,9 @@
 
 from flask import Blueprint, render_template, request, jsonify
 from . import calculator, conversions, memory
+import matplotlib.pyplot as plt
+import io
+import base64
 
 # Define blueprint
 calc_bp = Blueprint('calc', __name__)
@@ -45,3 +48,30 @@ def calculator_page():
         return jsonify(result=result)
 
     return render_template('calculator.html')
+
+@calc_bp.route('/plot', methods=['POST'])
+def plot_graph():
+    function = request.form['function']
+
+    # Generate plot data
+    try:
+        x = range(-10, 11)
+        y = eval(function, {'__builtins__': None}, {'x': x, 'math': math})
+        plt.plot(x, y)
+        plt.xlabel('X-axis')
+        plt.ylabel('Y-axis')
+        plt.title('Graph of ' + function)
+        plt.grid(True)
+
+        # Convert plot to base64 string for HTML img tag
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_base64 = base64.b64encode(buffer.getvalue()).decode('utf-8')
+        buffer.close()
+
+        return jsonify(success=True, graph_data=image_base64)
+
+    except Exception as e:
+        print(str(e))
+        return jsonify(success=False, error=str(e))
