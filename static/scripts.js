@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("calculator-form");
     const resultDiv = document.getElementById("result");
+    const clearButton = document.getElementById("clear-button");
 
     form.addEventListener("submit", function(event) {
         event.preventDefault();
@@ -13,10 +14,15 @@ document.addEventListener("DOMContentLoaded", function() {
             method: "POST",
             body: formData
         })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
-            resultDiv.innerHTML = data;
+            resultDiv.innerHTML = `<h2>Result: ${data.result}</h2>`;
         })
         .catch(error => console.error("Error:", error));
+    });
+
+    clearButton.addEventListener("click", function() {
+        form.reset();
+        resultDiv.innerHTML = "";
     });
 });
