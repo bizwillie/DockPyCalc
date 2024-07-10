@@ -5,6 +5,7 @@ from . import calculator, conversions, memory
 import matplotlib.pyplot as plt
 import io
 import base64
+import math
 
 # Define blueprint
 calc_bp = Blueprint('calc', __name__)
