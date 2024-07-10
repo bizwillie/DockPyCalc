@@ -20,7 +20,10 @@ def divide(x, y):
 
 # Scientific operations
 def modulus(x, y):
-    return x % y
+    if y != 0:
+        return x % y
+    else:
+        return "Error: Cannot divide by zero"
 
 def exponentiate(x, y):
     return x ** y
