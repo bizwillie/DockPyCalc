@@ -11,5 +11,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application into the container
 COPY . /app
 
-# Specify the command to run the Python application within the container
-CMD ["python", "calculator.py"]
+# Copy the database initialization script
+COPY init_db.py /docker-entrypoint-initdb.d/init_db.py
+
+# Wait for the database to be ready and run the initialization script
+CMD ["sh", "-c", "while ! nc -z auth_db 5432; do echo 'Waiting for database...'; sleep 1; done; python /docker-entrypoint-initdb.d/init_db.py && python calculator.py"]

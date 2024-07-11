@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - auth_db
+    environment:
+      - DATABASE_HOST=auth_db
+      - DATABASE_NAME=auth_db
+      - DATABASE_USER=auth_user
+      - DATABASE_PASSWORD=password
+
+  auth_db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: auth_db
+      POSTGRES_USER: auth_user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - app_network
+
+networks:
+  app_network:
+    driver: bridge
+
+volumes:
+  auth_db_data:

@@ -1,16 +1,20 @@
 # routes.py - Flask routes and UI handling
 
-from flask import Blueprint, render_template, request, jsonify
-from . import calculator, conversions, memory
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, session, flash
+from . import calculator, conversions, memory, auth
 import matplotlib.pyplot as plt
 import io
 import base64
+import math
 
 # Define blueprint
 calc_bp = Blueprint('calc', __name__)
 
 @calc_bp.route('/', methods=['GET', 'POST'])
 def calculator_page():
+    if 'username' not in session:
+        return redirect(url_for('calc.login'))
+
     if request.method == 'POST':
         operation = request.form['operation']
         num1 = float(request.form['num1'])
@@ -75,3 +79,33 @@ def plot_graph():
     except Exception as e:
         print(str(e))
         return jsonify(success=False, error=str(e))
+
+@calc_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if auth.authenticate(username, password):
+            session['username'] = username
+            return redirect(url_for('calc.calculator_page'))
+        else:
+            flash('Invalid credentials', 'danger')
+    return render_template('login.html')
+
+@calc_bp.route('/logout')
+def logout():
+    session.pop('username', None)
+    return redirect(url_for('calc.login'))
+
+@calc_bp.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        try:
+            auth.create_user(username, password)
+            flash('Registration successful. Please log in.', 'success')
+            return redirect(url_for('calc.login'))
+        except Exception as e:
+            flash(str(e), 'danger')
+    return render_template('register.html')
